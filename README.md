@@ -22,7 +22,7 @@ To summarize the existing current application:
         - It, like cellar or aging wine increases in value over time,
         - When there are only 7 years (or less) before expiration, the price increases with 2,
         - When there are only 2 years (or less) before expiration, the price increases with 4 however,
-        - But when the event has passed (see `expiresInYears`), it drops to zero to indicate we have to remove it from our inventory.
+        - But when the event has passed (see `expiresInYears`), the price drops to zero to indicate we have to remove it from our inventory.
 
 We have recently discovered a new market segment which like 'eco-brewed' wines. 
 Sadly enough they degrade really fast hence the price degrades twice as fast as a regular wine. Can you introduce this new type?

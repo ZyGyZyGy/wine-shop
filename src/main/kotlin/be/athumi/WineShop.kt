@@ -1,69 +1,37 @@
 package be.athumi
 
-class WineShop(var items: List<Wine>) {
+import be.athumi.strategy.AlexanderWineStrategy
+import be.athumi.strategy.AgingWineStrategy
+import be.athumi.strategy.EventWineStrategy
+import be.athumi.strategy.EcoWineStrategy
+import be.athumi.strategy.StandardWineStrategy
+
+class WineShop(private var items: List<Wine>) {
+
+    private val strategies = listOf(
+        AlexanderWineStrategy(),
+        AgingWineStrategy(),
+        EventWineStrategy(),
+        EcoWineStrategy(),
+        StandardWineStrategy()  // Default strategy, must be last
+    )
+
     fun next() {
-        // Wine Shop logic
-        for (i in items.indices) {
-            // Standard wines
-            if (items[i].name != "Bourdeaux Conservato"
-                && items[i].name != "Bourgogne Conservato"
-                && !items[i].name.startsWith("Event")
-            ) {
-                if (items[i].price > 0 && items[i].name != "Wine brewed by Alexander the Great") {
-                    items[i].price -= 1
-                }
-            } else {
-                // Conservato or Aging wines
-                if (items[i].price < 100) {
-                    items[i].price += 1
+        for (wine in items) {
+            // Find the first strategy that applies to this wine
+            val strategy = strategies.first { it.shouldApply(wine) }
 
-                    // Additional increase for Event wines with fewer years until expiration
-                    if (items[i].name.startsWith("Event")) {
-                        if (items[i].expiresInYears < 8) {
-                            if (items[i].price < 100) {
-                                items[i].price += 1
-                            }
-                        }
+            // Update the price
+            wine.price = strategy.updatePrice(wine)
 
-                        if (items[i].expiresInYears < 3) {
-                            if (items[i].price < 100) {
-                                items[i].price += 2
-                            }
-                        }
-                    }
-                }
+            // Update expiresInYears for all wines except Alexander the Great
+            if (wine.name != "Wine brewed by Alexander the Great") {
+                wine.expiresInYears -= 1
             }
 
-            // All wines except Alexander the Great
-            if (items[i].name != "Wine brewed by Alexander the Great") {
-                items[i].expiresInYears -= 1
-            } else if (items[i].price < 0) {
-                items[i].price = 0 // Ensure price never goes below 0
-            }
-
-            // Expired wines
-            if (items[i].expiresInYears < 0) {
-                if (!items[i].name.contains("Conservato")) {
-                    if (!items[i].name.contains("Event")) {
-                        if (items[i].price > 0) {
-                            if (items[i].name != "Wine brewed by Alexander the Great") {
-                                items[i].price -= 1 // For standard wines
-                            }
-                        }
-                    } else {
-                        // If Event wine expires, price drops to 0
-                        items[i].price = 0
-                    }
-                // Double the increase for expired Aging (Conservato) wines
-                } else {
-                    if (items[i].price < 100) { // Ensure price never exceeds 100
-                        items[i].price += 1
-                    }
-                }
-            }
-
-            if (items[i].price < 0) {
-                items[i].price = 0 // Ensure price never goes below 0
+            // Ensure price is never negative
+            if (wine.price < 0) {
+                wine.price = 0
             }
         }
     }

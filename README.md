@@ -31,7 +31,7 @@ A few constraints we have to consider:
 
 * You **cannot** change the Wine class
 * The WineShop constructor argument should not be changed.
-* Do small commits / changes so we can follow your 'way of thinking'
+* Do small commits / changes, so we can follow your 'way of thinking'
 
 We have multiple inventory printouts<br/> 
 **3 years ago :** 

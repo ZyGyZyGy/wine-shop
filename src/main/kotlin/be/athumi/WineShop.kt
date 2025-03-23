@@ -17,7 +17,7 @@ class WineShop(var items: List<Wine>) {
                 if (items[i].price < 100) {
                     items[i].price += 1
 
-                    // Event wines
+                    // Additional increase for Event wines with fewer years until expiration
                     if (items[i].name.startsWith("Event")) {
                         if (items[i].expiresInYears < 8) {
                             if (items[i].price < 100) {
@@ -51,7 +51,7 @@ class WineShop(var items: List<Wine>) {
                             }
                         }
                     } else {
-                        // If expired, price drops to 0
+                        // If Event wine expires, price drops to 0
                         items[i].price = 0
                     }
                 // Double the increase for expired Aging (Conservato) wines
